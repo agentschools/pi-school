@@ -9,9 +9,9 @@ agentInstructions: |
 
   1. What project trust is: the one-time prompt Pi shows on interactive
      startup when a directory has project-local resources that require
-     trust (.pi/settings.json, .pi/extensions, .pi/skills, .pi/prompts,
-     .pi/themes, .pi/SYSTEM.md, .pi/APPEND_SYSTEM.md, or a project
-     .agents/skills directory). A bare .pi directory with none of those
+     trust (.pi/settings.json, .pi/mcp.json, .pi/extensions, .pi/skills,
+     .pi/prompts, .pi/themes, .pi/SYSTEM.md, .pi/APPEND_SYSTEM.md, or a
+     project .agents/skills directory). A bare .pi directory with none of those
      doesn't trigger it. Trusting a project lets Pi load those resources;
      declining skips them. AGENTS.md/CLAUDE.md context files load either
      way, regardless of trust.
@@ -54,6 +54,7 @@ Pi is a local agent — it runs with your permissions and reads and writes files
 Pi checks the current directory for project-local resources that require trust:
 
 - `.pi/settings.json`
+- `.pi/mcp.json` (project MCP servers)
 - `.pi/extensions`, `.pi/skills`, `.pi/prompts`, or `.pi/themes`
 - `.pi/SYSTEM.md` or `.pi/APPEND_SYSTEM.md`
 - a project `.agents/skills` directory (in the current directory or an ancestor)
@@ -62,7 +63,7 @@ If none of these exist, there's nothing to trust and Pi starts normally. A bare 
 
 If Pi finds one of these and doesn't already have a saved decision for the directory (or a parent of it), it asks you, right there in the terminal, whether to trust the project. Say yes for your own projects. Say no if you've just cloned something you haven't reviewed yet.
 
-Declining trust doesn't stop Pi from working — it just skips loading the project's local settings, extensions, skills, prompts, and themes for that session. `AGENTS.md` and `CLAUDE.md` context files load either way.
+Declining trust doesn't stop Pi from working — it just skips loading the project's local settings, MCP servers, extensions, skills, prompts, and themes for that session. `AGENTS.md` and `CLAUDE.md` context files load either way.
 
 ## Saving your decision
 

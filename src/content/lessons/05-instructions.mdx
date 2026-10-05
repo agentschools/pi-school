@@ -49,6 +49,8 @@ Pi loads context files from three places, in this order:
 
 All of these can exist at once — Pi loads them together. In this lesson, we're creating the global one.
 
+If you need one directory to ignore its usual `AGENTS.md` without deleting it, add an `AGENTS.override.md` next to it. It replaces `AGENTS.md` or `CLAUDE.md` in that directory only; context files from other directories still load.
+
 ## Create your AGENTS.md
 
 <AgentPrompt title="Instructions" />

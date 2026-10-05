@@ -23,10 +23,9 @@ agentInstructions: |
 
   2. Explain the skill's approach before using it: it connects directly
      to Chrome's DevTools Protocol via a dependency-free CLI script, with
-     no MCP server, Puppeteer, or Playwright involved. This is Pi's
-     answer to what other agent tools solve with a Chrome DevTools MCP
-     server — Pi has no built-in MCP client (see the Tools lesson), and
-     this skill sidesteps that gap entirely rather than needing one.
+     no MCP server, Puppeteer, or Playwright involved. It's a skill, so
+     it only costs context when it's actually used, and it needs nothing
+     beyond Node and Chrome.
 
   3. Start with something simple: list open tabs, then take a screenshot
      of whatever tab the student has open. This verifies the connection
@@ -65,7 +64,7 @@ import AgentPrompt from '../../components/AgentPrompt.astro'
 
 Most browser automation tools require a headless browser, separate logins, and a lot of code. In this exercise, your agent drives your real browser — the one you use every day, with all your tabs open and all your accounts logged in.
 
-Pi has no built-in MCP client (covered in the Tools lesson), so this doesn't go through a Chrome DevTools MCP server the way it might in some other tools. Instead, you'll use the [Faster Chrome DevTools skill](https://github.com/zeke/faster-chrome-devtools-skill) — a dependency-free command-line tool that talks to Chrome's DevTools Protocol directly. No MCP server, no Puppeteer, no Playwright.
+You'll use the [Faster Chrome DevTools skill](https://github.com/zeke/faster-chrome-devtools-skill) — a dependency-free command-line tool that talks to Chrome's DevTools Protocol directly. No MCP server, no Puppeteer, no Playwright.
 
 <AgentPrompt title="Drive a browser" prompt={`Let's work on the "Drive a browser" exercise together!`} />
 

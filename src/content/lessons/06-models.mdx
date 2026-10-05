@@ -15,16 +15,18 @@ agentInstructions: |
 
   2. How to see and change the current model: it's shown in the footer at
      the bottom of the terminal, alongside the working directory, session
-     name, and context usage. Switch with /model or Ctrl+L. Shift+Tab
-     cycles the thinking level for models that support it (the editor's
+     name, and context usage. Switch with /model or Ctrl+L; the choice
+     applies to the current session, and Ctrl+S in the picker saves it as
+     the default. /thinking picks the thinking level for models that
+     support it, and Shift+Tab cycles through levels (the editor's
      border color indicates the current level). Ctrl+P / Shift+Ctrl+P
      cycles through a shortlist of "scoped" models set via /scoped-models
      or the enabledModels setting.
 
-  3. Connecting a model via /login: ChatGPT Plus/Pro (Codex) is
-     officially sanctioned by OpenAI for third-party tools like Pi. A free
-     OpenRouter API key with a :free-tagged model works with zero cost and
-     no subscription. Claude Pro/Max and GitHub Copilot both appear as
+  3. Connecting a model via /login: ChatGPT Plus/Pro through OpenAI's
+     Sign in with ChatGPT is OpenAI's official way to use a ChatGPT plan
+     in third-party tools like Pi. Signing in with OpenRouter and picking
+     a :free-tagged model works with zero cost and no subscription. Claude Pro/Max and GitHub Copilot both appear as
      /login options but their terms prohibit routing subscription
      credentials through third-party tools like Pi — this was covered in
      the Installation lesson and still applies here.
@@ -56,7 +58,9 @@ Your current model is shown in the footer at the bottom of the terminal, along w
 
 ## Change the model
 
-Type `/model` to open the model picker, or press `Ctrl+L`. If the model supports extended thinking, `Shift+Tab` cycles through thinking levels — the editor's border color changes to show the current level.
+Type `/model` to open the model picker, or press `Ctrl+L`. Your choice applies to the current session; press `Ctrl+S` in the picker to save it as the default for new sessions.
+
+If the model supports extended thinking, `/thinking` picks a thinking level, and `Shift+Tab` cycles through levels. The editor's border color changes to show the current level.
 
 Once you've picked a shortlist of models you switch between often (via `/scoped-models` or the `enabledModels` setting), `Ctrl+P` and `Shift+Ctrl+P` cycle through just that list, which is faster than opening the full picker every time.
 
@@ -64,9 +68,9 @@ Once you've picked a shortlist of models you switch between often (via `/scoped-
 
 As covered in the Installation lesson, `/login` is how you connect a model provider:
 
-- **ChatGPT Plus or Pro** — officially sanctioned by OpenAI for third-party tools like Pi. The safest subscription path.
-- **A free OpenRouter API key** — sign up, grab a key, and pick a model tagged `:free` (for example `google/gemma-4-31b-it:free`). Zero cost, no local compute required.
-- **Claude Pro/Max and GitHub Copilot** both show up as `/login` options, but using them through Pi violates Anthropic's and GitHub's terms of service, respectively — both have real enforcement history. Stick with ChatGPT Codex or an API key.
+- **ChatGPT Plus or Pro**: choose OpenAI, then Sign in with ChatGPT. This is OpenAI's official way to use your plan in third-party tools like Pi. The safest subscription path.
+- **A free OpenRouter account**: choose OpenRouter, sign in through your browser, and pick a model tagged `:free` (for example `google/gemma-4-31b-it:free`). Zero cost, no local compute required.
+- **Claude Pro/Max and GitHub Copilot** both show up as `/login` options, but using them through Pi violates Anthropic's and GitHub's terms of service, respectively — both have real enforcement history. Stick with Sign in with ChatGPT, OpenRouter, or an API key.
 
 ## Cloudflare
 
