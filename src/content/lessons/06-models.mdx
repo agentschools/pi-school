@@ -40,6 +40,17 @@ agentInstructions: |
      CLOUDFLARE_ACCOUNT_ID, more limited since it only hosts certain
      models.
 
+  5. Local models, for students who want to run models on their own
+     machine: Pi connects directly to a llama.cpp router (llama-server
+     started without a model). Configure it with /login llama.cpp (the
+     default URL is http://127.0.0.1:8080), load and download models
+     with /llama (it can search Hugging Face), then pick one with /model.
+     Ollama, LM Studio, vLLM, and other OpenAI-compatible servers work
+     through ~/.pi/agent/models.json instead. Local models are free and
+     private but need a capable machine, and small ones are noticeably
+     weaker at agentic tasks than flagship models. Don't walk the student
+     through setup unless they ask.
+
   This lesson has no file-system verification step. Completion is
   confirmed by the student demonstrating understanding through the quiz.
 ---
@@ -82,7 +93,7 @@ If you already have a Cloudflare account, you can use it as a model provider. On
 export CLOUDFLARE_API_KEY=...           # or use /login
 export CLOUDFLARE_ACCOUNT_ID=...
 export CLOUDFLARE_GATEWAY_ID=...        # create at dash.cloudflare.com → AI → AI Gateway
-pi --provider cloudflare-ai-gateway --model "claude-sonnet-4-5"
+pi --provider cloudflare-ai-gateway --model "claude-sonnet-5"
 ```
 
 **Workers AI** runs open-source models directly on Cloudflare's network. It's more limited than AI Gateway since it only hosts the models Cloudflare provides, but it's there if you want it:
@@ -94,6 +105,16 @@ pi --provider cloudflare-workers-ai --model "@cf/moonshotai/kimi-k2.6"
 ```
 
 The "Use an AI gateway" exercise covers the full setup once you've finished the lessons.
+
+## Local models
+
+If you'd rather run models on your own computer, Pi connects directly to the [llama.cpp](https://github.com/ggml-org/llama.cpp) router. Start `llama-server` without a model (router mode), then inside Pi:
+
+- `/login llama.cpp` stores the router's URL (`http://127.0.0.1:8080` by default).
+- `/llama` loads and unloads models, and can search Hugging Face and download new ones.
+- `/model` picks a loaded model.
+
+Ollama, LM Studio, vLLM, and other OpenAI-compatible servers work too, configured in `~/.pi/agent/models.json`. Local models are free and private, but they need a capable machine, and small ones are noticeably weaker at agentic work than flagship models. See Pi's [llama.cpp guide](https://pi.dev/docs/latest/llama-cpp) for the full setup.
 
 Every model also has a [context window](/glossary#context-window) — a limit on how much conversation it can hold at once. The next lesson covers what that means in practice and how Pi manages it.
 
