@@ -33,6 +33,7 @@ Type these inside Pi's prompt. Type `/` on its own to see the full list of avail
 | `/import <file>` | Import and resume a session from a JSONL file |
 | `/share` | Upload the session and get a viewer link (a private GitHub gist, or a Radius artifact if you're signed in to Radius) |
 | `/bug [description]` | Prepare a private bug report for the Pi developers |
+| `/mcp` | Inspect, sign in to, reconnect, enable, or disable [MCP](/lessons/mcp) servers |
 | `/reload` | Reload keybindings, [extensions](/lessons/extensions), skills, prompt templates, themes, and context files |
 | `/hotkeys` | Show all keyboard shortcuts |
 | `/changelog` | Display version history |
@@ -116,7 +117,10 @@ Pass these when starting `pi` from your terminal. For the full list, see the [co
 | `--provider <name>` | Choose a provider, e.g. `anthropic`, `openai`, `google` |
 | `--model <pattern>` | Choose a model, e.g. `sonnet:high` or `openai/gpt-4o` |
 | `--no-context-files`, `-nc` | Disable `AGENTS.md`/`CLAUDE.md` discovery |
+| `--tools <list>`, `-t` | Choose exactly which [tools](/lessons/tools) are enabled, e.g. `read,grep,find,ls` |
+| `--exclude-tools <list>`, `-xt` | Disable specific tools |
 | `--no-builtin-tools`, `-nbt` | Disable built-in tools, keep extension/custom tools |
+| `--no-mcp` | Start without [MCP](/lessons/mcp) servers |
 | `--tui-mode regular` | Use the terminal's normal scrollback instead of fullscreen |
 | `--approve`, `-a` | Trust project-local settings for one run |
 | `--no-approve`, `-na` | Ignore project-local settings for one run |
@@ -127,6 +131,10 @@ Run these from your terminal, outside a Pi session. Agents can run them through 
 
 | Command | What it does |
 | --- | --- |
+| `pi mcp add <name> -- <command> [args...]` | Add a local [MCP](/lessons/mcp) server (add `-l` for the current project) |
+| `pi mcp add <name> --url <url>` | Add a remote MCP server |
+| `pi mcp list` | Connect to every MCP server and show its tools and errors |
+| `pi mcp login <name>` | Sign in to an OAuth MCP server |
 | `pi install <source>` | Install a Pi package, e.g. `npm:pi-web-access` |
 | `pi update` | Update Pi (`pi update --all` also updates packages) |
 | `pi config` | Choose which package and built-in resources load |
@@ -145,6 +153,7 @@ Where Pi looks for config and customization files. Global paths apply to every p
 | `~/.pi/agent/skills/`, `~/.agents/skills/` | Global [skills](/lessons/skills) |
 | `~/.pi/agent/prompts/` | Global prompt templates |
 | `~/.pi/agent/themes/` | Global themes |
+| `~/.pi/agent/mcp.json` | [MCP](/lessons/mcp) servers available in every project |
 | `~/.pi/agent/models.json` | Custom model/provider definitions |
 | `~/.pi/agent/keybindings.json` | Custom keyboard shortcuts |
 | `~/.pi/agent/trust.json` | Saved [project trust](/lessons/trust) decisions |
@@ -157,6 +166,7 @@ Where Pi looks for config and customization files. Global paths apply to every p
 | --- | --- |
 | `AGENTS.md` (or `CLAUDE.md`) | Project-specific instructions, typically committed to Git |
 | `.pi/settings.json` | Project-specific config overrides |
+| `.pi/mcp.json` | Project-specific MCP servers |
 | `.pi/extensions/` | Project-specific extensions |
 | `.pi/skills/`, `.agents/skills/` | Project-specific skills |
 | `.pi/prompts/` | Project-specific prompt templates |

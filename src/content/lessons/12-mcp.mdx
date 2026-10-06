@@ -1,0 +1,144 @@
+---
+title: "MCP"
+slug: mcp
+description: "Connect MCP servers to give Pi new tools."
+order: 12
+quiz: true
+agentInstructions: |
+  Cover these four topics:
+
+  1. What MCP (Model Context Protocol) is: an open standard for small
+     programs, called servers, that give an AI agent extra tools, like
+     live weather data, a database, or a company's docs. Pi has built-in
+     MCP support. Servers run locally over stdio (a command Pi starts) or
+     remotely over streamable HTTP (a URL). The legacy SSE transport isn't
+     supported.
+
+  2. Where servers are configured: ~/.pi/agent/mcp.json for servers
+     available everywhere, and .pi/mcp.json for a single project (only
+     read after the project is trusted). The format is the same
+     "mcpServers" object Claude Code, Claude Desktop, and Cursor use, so
+     entries can usually be copied over. Manage servers from the shell
+     with `pi mcp add`, `pi mcp list`, and `pi mcp remove` (agents can run
+     these through bash), or inside a session with /mcp, which shows each
+     server's state and lets you reconnect, sign in, or enable and
+     disable it. Run /reload after changing mcp.json outside the session.
+     Remote servers that use OAuth need no credentials in mcp.json: sign
+     in with /mcp or `pi mcp login <server>`.
+
+  3. Why MCP doesn't fill up the context window in Pi: each server's
+     exposure setting decides how its tools reach the model. The default,
+     codemode, keeps the tools out of the model's tool list entirely. The
+     model finds them by searching and calls them from a codemode script.
+     deferred loads tools through tool_search when needed, direct declares
+     them like built-in tools (best for a few tools used constantly), and
+     hidden turns them off. Tools are named mcp__<server>__<tool>. The
+     Code mode lesson goes deeper on codemode.
+
+  4. Alternatives and switching off: `pi --no-mcp` disables MCP for one
+     run. The community pi-mcp-adapter package is an alternative that
+     replaces the built-in support (it starts servers only when used and
+     stops idle ones). It's optional, mention it in one sentence. If the
+     student already has pi-mcp-adapter installed from an earlier version
+     of this course, the built-in MCP support stays off until they remove
+     the adapter (`pi remove npm:pi-mcp-adapter`) and re-enable the
+     built-in under Built-in in `pi config`. Check
+     ~/.pi/agent/settings.json for pi-mcp-adapter in "packages" or
+     "-builtin:mcp" in "extensions" before the hands-on part, and help
+     them switch if they want to follow along with the built-in support.
+
+  After teaching and quizzing, help the student add the Open-Meteo weather
+  server (see the lesson body for the exact command), then have them run
+  /reload and /mcp to confirm it's connected. Verify completion by reading
+  ~/.pi/agent/mcp.json (or .pi/mcp.json in the current project) and
+  confirming it contains an open-meteo entry, then have the student ask a
+  weather question and confirm the answer came from a tool call rather
+  than training data.
+---
+
+import AgentPrompt from '../../components/AgentPrompt.astro'
+
+Pi's built-in tools cover files and shell commands. For everything else, like live data, a company's internal docs, or a third-party service, there's **MCP**, the Model Context Protocol. It's an open standard for small programs, called servers, that give an AI agent extra tools. Pi supports it out of the box.
+
+<AgentPrompt title="MCP" />
+
+## Local and remote servers
+
+An MCP server is either:
+
+- **Local**: a command Pi starts on your computer and talks to over stdio, often via `npx` or `uvx`.
+- **Remote**: a URL Pi connects to over streamable HTTP. Some remote servers need you to sign in.
+
+## Add a weather server
+
+Let's connect a local server that fetches live weather data from [Open-Meteo](https://open-meteo.com), a free public weather API with no account or API key required. Run this in your terminal (or ask Pi to run it for you):
+
+```bash
+pi mcp add open-meteo -- npx -y -p open-meteo-mcp-server open-meteo-mcp-server
+```
+
+Everything after `--` is the command Pi runs to start the server. This one needs [Node.js](https://nodejs.org). If you don't have it, ask Pi to help you install it.
+
+Check that the server starts and see what tools it offers:
+
+```bash
+pi mcp list
+```
+
+Then, inside your Pi session, run `/reload` to pick up the new server, and `/mcp` to see its status.
+
+## Where servers are configured
+
+`pi mcp add` writes to `~/.pi/agent/mcp.json`, which applies to every project. Add `--local` (`-l`) to write `.pi/mcp.json` in the current project instead. Project servers only load once the project is trusted (see the Trust lesson).
+
+```json
+{
+  "mcpServers": {
+    "open-meteo": {
+      "command": "npx",
+      "args": ["-y", "-p", "open-meteo-mcp-server", "open-meteo-mcp-server"]
+    }
+  }
+}
+```
+
+This is the same `mcpServers` format Claude Code, Claude Desktop, and Cursor use, so you can usually copy existing entries straight over.
+
+A remote server is just a URL. For example, Cloudflare's public documentation server needs no sign-in:
+
+```bash
+pi mcp add cloudflare-docs --url https://docs.mcp.cloudflare.com/mcp
+```
+
+For remote servers that use OAuth, you don't put credentials in the file. Run `/mcp` and choose "Sign in", or run `pi mcp login <server>`, and Pi opens the authorization page in your browser.
+
+## Try it
+
+Ask Pi something only the weather server can answer:
+
+> What's the weather forecast for Tokyo for the next three days?
+
+Watch the tool calls. Pi searches for a weather tool, calls it, and answers from the result instead of from memory.
+
+<AgentPrompt title="MCP" prompt={`I've added the Open-Meteo MCP server and run /reload. Let's verify the MCP lesson is complete.`} />
+
+## Why MCP doesn't fill up your context
+
+MCP servers can offer dozens of tools, and every tool definition the model sees costs context, whether you use it or not. Pi avoids that by not showing MCP tools to the model up front. Each server has an **exposure** setting that decides how its tools reach the model:
+
+| Exposure             | What happens                                                                  |
+|----------------------|-------------------------------------------------------------------------------|
+| `codemode` (default) | Hidden from the tool list. The model searches for tools and calls them from a codemode script. |
+| `deferred`           | Hidden until `tool_search` loads the ones the model needs.                   |
+| `direct`             | Shown to the model like a built-in tool. Best for a few tools you use constantly. |
+| `hidden`             | Turned off.                                                                   |
+
+You can change a server's exposure in `/mcp`. Tools are named `mcp__<server>__<tool>`, so the weather tool you just used is something like `mcp__open_meteo__weather_forecast`. The next lesson, Code mode, explains what those codemode scripts are.
+
+## Turning MCP off
+
+Run `pi --no-mcp` to start a session with no MCP servers. To disable a single server, choose it in `/mcp` and disable it, or set `"enabled": false` on its entry.
+
+If you'd rather have servers that start only when used and stop when idle, the community [`pi-mcp-adapter`](https://github.com/nicobailon/pi-mcp-adapter) package replaces Pi's built-in MCP support. If you installed it during an earlier version of this course, the built-in support stays off until you remove it with `pi remove npm:pi-mcp-adapter` and re-enable `mcp` under Built-in in `pi config`.
+
+For OAuth options, project overrides, and resources, see Pi's [MCP documentation](https://pi.dev/docs/latest/mcp).

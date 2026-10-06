@@ -196,7 +196,8 @@ frontmatter.
 Lesson content was last checked against Pi 1.0.4. When Pi ships a new
 release, read its CHANGELOG.md and `docs/` (`npm pack` the package, or
 fetch the registry tarball directly since `min-release-age` blocks fresh
-versions) and update any lessons it affects.
+versions) and update any lessons it affects. Lessons 11-13 (Tools, MCP,
+Code mode) cover Pi's built-in MCP and codemode support, added in 0.99.
 
 To try a lesson's hands-on steps without touching your real Pi config,
 point Pi at a throwaway agent dir: `PI_CODING_AGENT_DIR=/tmp/pihome pi

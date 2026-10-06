@@ -16,6 +16,10 @@ A plain text file containing custom instructions that Pi reads at the start of e
 
 **Command-Line Interface.** A way to interact with software by typing text commands. Pi itself is invoked from the CLI (`pi`), and it also has a non-interactive print mode for one-off tasks, like `pi -p "explain this function"`. Unlike the interactive [TUI](#tui), print mode runs a single prompt and exits.
 
+## codemode
+
+A built-in Pi tool that lets the model write a short JavaScript script that calls other tools, for example several file reads in parallel, instead of calling them one at a time. Only the script's output goes back to the model, which saves round trips and context. It's also how [MCP](#mcp) tools are reached by default. See the [Code mode lesson](/lessons/code-mode).
+
 ## command
 
 A slash-prefixed action you can run inside Pi, like `/model` to switch AI models, `/share` to share a session, or `/compact` to summarize context. Custom ones you define yourself are called [prompt templates](#prompt-template) and run the same way, e.g. `/summarize`.
@@ -62,7 +66,7 @@ To learn the Markdown format interactively, check out [Markdown Live Preview](ht
 
 ## MCP
 
-**Model Context Protocol.** An open standard for connecting AI agents to external tools and services — for example, a server that gives an agent access to a database, a browser, or an API. Pi has no built-in MCP client by design, since MCP tool definitions can burn a large chunk of a session's context window whether or not they're used. The community [pi-mcp-adapter](https://github.com/nicobailon/pi-mcp-adapter) package restores MCP access through a single lightweight proxy tool instead.
+**Model Context Protocol.** An open standard for connecting AI agents to external tools and services — for example, a server that gives an agent access to a database, a browser, or an API. Pi has built-in MCP support: add servers with `pi mcp add` or in `mcp.json`, and manage them with `/mcp`. By default, MCP tools aren't shown to the model up front; it finds and calls them through [codemode](#codemode), so connected servers don't fill up the context window. See the [MCP lesson](/lessons/mcp).
 
 ## mode
 
@@ -104,7 +108,7 @@ A few popular cross-platform editors (all free): [VS Code](https://code.visualst
 
 ## tool
 
-A capability that Pi's AI agent can use. Built-in tools include `read`, `write`, `edit`, `bash`, `grep`, `find`, and `ls`. [Extensions](#extension) can register custom tools, and the [pi-mcp-adapter](#mcp) package exposes MCP tools through a proxy.
+A capability that Pi's AI agent can use. `read`, `bash`, `edit`, and `write` are on by default; `grep`, `find`, and `ls` are built in but off unless you enable them. [Extensions](#extension) can register custom tools, and [MCP](#mcp) servers add more. See the [Tools lesson](/lessons/tools).
 
 ## trust
 
