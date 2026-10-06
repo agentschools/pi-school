@@ -24,9 +24,9 @@ agentInstructions: |
      a project's .pi/settings.json.
 
   4. Which models support vision, based on verified free-tier options
-     rather than a specific subscription product: OpenAI's Codex model
-     (the /login ChatGPT Plus/Pro path from Installation) supports image
-     input. On the free OpenRouter path, specific :free-tagged models
+     rather than a specific subscription product: OpenAI's GPT models
+     (including through the Sign in with ChatGPT path from Installation)
+     support image input. On the free OpenRouter path, specific :free-tagged models
      support vision too — check openrouter.ai/models for current
      :free models with image input, since the exact list changes over
      time. If a model doesn't acknowledge an image, that's a sign to
@@ -78,10 +78,10 @@ Two settings control how Pi handles images, in `~/.pi/agent/settings.json` or a 
 
 Not all models can interpret images, and vision support isn't tied to a specific subscription product the way it might be with other tools — it depends on which model you're actually using:
 
-- **OpenAI's Codex model** (the `/login` ChatGPT Plus/Pro path from Installation) supports image input.
+- **OpenAI's GPT models**, including through the Sign in with ChatGPT path from Installation, support image input.
 - **Free OpenRouter models** — some `:free`-tagged models support vision too, though the specific list changes over time as providers add and remove models. Check [openrouter.ai/models](https://openrouter.ai/models) and filter for models tagged `:free` with image input support.
 
-If a model doesn't acknowledge your image or seems to ignore it, that's a sign to switch to a confirmed vision-capable model.
+If a model doesn't acknowledge your image or seems to ignore it, that's a sign to switch to a confirmed vision-capable model. Run `pi --list-models` in your terminal (its `images` column) or browse [pi.dev/models](https://pi.dev/models) to see which models accept images.
 
 ## What vision is useful for
 

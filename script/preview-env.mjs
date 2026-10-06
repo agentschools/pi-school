@@ -144,19 +144,22 @@ async function seedKvNamespace(kvNamespaceId) {
   const keys = JSON.parse(listOutput).map((entry) => entry.name);
   if (keys.length === 0) return;
 
+  // The KV bulk get API accepts at most 100 keys per request.
   const keysFile = "/tmp/pi-school-preview-keys.json";
-  writeFileSync(keysFile, JSON.stringify(keys));
-
-  const { stdout: bulkGetOutput } = await wrangler([
-    "kv",
-    "bulk",
-    "get",
-    keysFile,
-    "--namespace-id",
-    productionKvNamespaceId,
-    "--remote",
-  ]);
-  const values = JSON.parse(bulkGetOutput);
+  const values = {};
+  for (let i = 0; i < keys.length; i += 100) {
+    writeFileSync(keysFile, JSON.stringify(keys.slice(i, i + 100)));
+    const { stdout: bulkGetOutput } = await wrangler([
+      "kv",
+      "bulk",
+      "get",
+      keysFile,
+      "--namespace-id",
+      productionKvNamespaceId,
+      "--remote",
+    ]);
+    Object.assign(values, JSON.parse(bulkGetOutput));
+  }
 
   const entries = keys.map((key) => ({ key, value: values[key]?.value ?? "" }));
   const putFile = "/tmp/pi-school-preview-seed.json";

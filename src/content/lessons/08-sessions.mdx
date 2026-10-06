@@ -21,13 +21,17 @@ agentInstructions: |
      recent session directly. /session shows info about the current
      session (file path, ID, message count, tokens, cost).
 
-  4. Sharing: /share uploads the session as a private GitHub gist with a
-     shareable HTML link — this requires GitHub authentication, which the
-     student doesn't need to set up now (full git/GitHub setup is its own
+  4. Sharing: /share uploads the session and returns a viewer link. It
+     uses a private GitHub gist (or a Radius artifact if the student has
+     signed in to Radius, Earendil's own service, with /login radius).
+     The gist route requires GitHub authentication, which the student
+     doesn't need to set up now (full git/GitHub setup is its own
      exercise later in the course, mention it by name: "Use Git and
      GitHub"). /export [file] writes the session to HTML or JSONL
      locally, no GitHub account needed, useful for saving or reviewing a
-     session without sharing it.
+     session without sharing it. Also mention /bug [description], which
+     prepares a private bug report for the Pi developers (with an option
+     to include or leave out the transcript).
 
   This lesson has no config file to edit. After teaching and quizzing,
   verify completion with the hands-on exercise: ask the student to name
@@ -79,7 +83,11 @@ Type `/session` any time to see info about your current session: file path, sess
 Two different commands, for two different needs:
 
 - **`/export [file]`** — writes the session to HTML or JSONL, saved locally. No account needed. Good for keeping a record or reviewing a session outside the terminal.
-- **`/share`** — uploads the session as a **private GitHub gist** with a shareable HTML link. This needs GitHub authentication, which we haven't set up yet — you'll get to the full git/GitHub setup in the "Use Git and GitHub" exercise later in the course. For now, just know the command exists.
+- **`/share`** — uploads the session and gives you a viewer link. By default it uses a **private GitHub gist**, which needs GitHub authentication. We haven't set that up yet; you'll get to the full git/GitHub setup in the "Use Git and GitHub" exercise later in the course. (If you've signed in to [Radius](https://radius.earendil.com), Earendil's own service, with `/login radius`, `/share` uses that instead.) For now, just know the command exists.
+
+Review a session before sharing it: it can contain file contents, command output, and anything else that came up in the conversation.
+
+If Pi itself misbehaves, `/bug` prepares a private bug report for the Pi developers. You choose whether to include the transcript.
 
 ## Exercise: read your own session file
 

@@ -193,6 +193,17 @@ fenced blocks. Pi's TUI always prints the literal ``` fence lines
 block reads as unrendered markdown. Don't duplicate this note in MDX
 frontmatter.
 
+Lesson content was last checked against Pi 1.0.4. When Pi ships a new
+release, read its CHANGELOG.md and `docs/` (`npm pack` the package, or
+fetch the registry tarball directly since `min-release-age` blocks fresh
+versions) and update any lessons it affects.
+
+To try a lesson's hands-on steps without touching your real Pi config,
+point Pi at a throwaway agent dir: `PI_CODING_AGENT_DIR=/tmp/pihome pi
+...`. `pi mcp list` only reads a project's `.pi/mcp.json` when the
+project is saved in `trust.json`; `defaultProjectTrust: "always"` isn't
+enough for the shell commands.
+
 The `<AgentPrompt>` component (`src/components/AgentPrompt.astro`) renders
 a copy-paste prompt linking back to the lesson. Every lesson should include
 at least one, except Installation — a student can't paste a prompt into

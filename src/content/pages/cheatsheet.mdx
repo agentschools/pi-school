@@ -15,7 +15,8 @@ Type these inside Pi's prompt. Type `/` on its own to see the full list of avail
 | Command | What it does |
 | --- | --- |
 | `/login`, `/logout` | Manage OAuth or API-key credentials for a [model](/lessons/models) provider |
-| `/model` | Switch models |
+| `/model` | Switch models for this session (`Ctrl+S` in the picker saves it as the default) |
+| `/thinking [level]` | Set the thinking level |
 | `/scoped-models` | Enable/disable models for `Ctrl+P` cycling |
 | `/settings` | Thinking level, theme, message delivery, transport |
 | `/resume` | Pick from previous [sessions](/lessons/sessions) |
@@ -30,7 +31,8 @@ Type these inside Pi's prompt. Type `/` on its own to see the full list of avail
 | `/copy` | Copy the last assistant message to the clipboard |
 | `/export [file]` | Export the session to HTML or JSONL |
 | `/import <file>` | Import and resume a session from a JSONL file |
-| `/share` | Upload the session as a private GitHub gist with a shareable HTML link |
+| `/share` | Upload the session and get a viewer link (a private GitHub gist, or a Radius artifact if you're signed in to Radius) |
+| `/bug [description]` | Prepare a private bug report for the Pi developers |
 | `/reload` | Reload keybindings, [extensions](/lessons/extensions), skills, prompt templates, themes, and context files |
 | `/hotkeys` | Show all keyboard shortcuts |
 | `/changelog` | Display version history |
@@ -69,6 +71,16 @@ The full set is customizable via `~/.pi/agent/keybindings.json` — these are th
 | `Ctrl+P` / `Shift+Ctrl+P` | Cycle forward/backward through scoped models |
 | `Shift+Tab` | Cycle thinking level |
 | `Ctrl+T` | Collapse or expand thinking blocks |
+| `Ctrl+S` (in `/model` or `/thinking`) | Save the selection as the default |
+
+### Fullscreen transcript
+
+| Shortcut | What it does |
+| --- | --- |
+| `Ctrl+Shift+F` (`Ctrl+F` on Windows) | Search the transcript |
+| `PageUp` / `PageDown` | Scroll the transcript |
+| `Ctrl+Home` / `Ctrl+End` | Jump to the start or end of the transcript |
+| `Ctrl+O` | Collapse or expand tool output |
 
 ### Sessions and tree
 
@@ -91,7 +103,7 @@ The full set is customizable via `~/.pi/agent/keybindings.json` — these are th
 
 ## CLI flags
 
-Pass these when starting `pi` from your terminal. For the full list, see the [usage docs](https://pi.dev/docs/latest/usage).
+Pass these when starting `pi` from your terminal. For the full list, see the [command line docs](https://pi.dev/docs/latest/cli).
 
 | Flag | What it does |
 | --- | --- |
@@ -105,8 +117,19 @@ Pass these when starting `pi` from your terminal. For the full list, see the [us
 | `--model <pattern>` | Choose a model, e.g. `sonnet:high` or `openai/gpt-4o` |
 | `--no-context-files`, `-nc` | Disable `AGENTS.md`/`CLAUDE.md` discovery |
 | `--no-builtin-tools`, `-nbt` | Disable built-in tools, keep extension/custom tools |
+| `--tui-mode regular` | Use the terminal's normal scrollback instead of fullscreen |
 | `--approve`, `-a` | Trust project-local settings for one run |
 | `--no-approve`, `-na` | Ignore project-local settings for one run |
+
+## Shell commands
+
+Run these from your terminal, outside a Pi session. Agents can run them through `bash` too.
+
+| Command | What it does |
+| --- | --- |
+| `pi install <source>` | Install a Pi package, e.g. `npm:pi-web-access` |
+| `pi update` | Update Pi (`pi update --all` also updates packages) |
+| `pi config` | Choose which package and built-in resources load |
 
 ## File paths
 
@@ -143,5 +166,5 @@ Where Pi looks for config and customization files. Global paths apply to every p
 
 - [Pi's own docs](https://pi.dev/docs/latest) are the canonical reference for everything above.
 - The [keybindings docs](https://pi.dev/docs/latest/keybindings) cover every default binding and how to remap them.
-- The [usage docs](https://pi.dev/docs/latest/usage) document every CLI flag and slash command in detail.
+- The [command line docs](https://pi.dev/docs/latest/cli) and [slash command docs](https://pi.dev/docs/latest/slash-commands) list every CLI flag and slash command.
 - The [Glossary](/glossary) defines the terms used throughout this cheatsheet and the lessons.

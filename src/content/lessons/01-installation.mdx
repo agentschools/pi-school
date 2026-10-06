@@ -8,8 +8,8 @@ agentInstructions: |
   If the student is talking to you through Pi already, they've completed
   most of this lesson. Confirm they have a supported OS (macOS, Windows, or
   Linux), can run `pi` in a terminal, and have successfully authenticated
-  with a model (either via `/login` with ChatGPT Plus/Pro, or an API key
-  from a provider like OpenRouter). Confirm they've sent at least one
+  with a model (either via `/login` with Sign in with ChatGPT on a
+  ChatGPT Plus/Pro plan, or a provider like OpenRouter). Confirm they've sent at least one
   prompt and received a response.
 ---
 
@@ -59,6 +59,12 @@ Or with npm, pnpm, or bun:
 npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 ```
 
+Or with Nix:
+
+```bash
+nix profile add github:earendil-works/pi/stable
+```
+
 </div>
 
 <div id="install-windows" class="hidden">
@@ -85,7 +91,7 @@ npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 
 </div>
 
-You'll need [Node.js](https://nodejs.org) if you're installing via npm/pnpm/bun.
+The installer script is the recommended option: it pins all of Pi's dependencies, and `pi update` keeps it current. Installing via npm/pnpm/bun needs [Node.js](https://nodejs.org) 22.19 or newer.
 
 <script>{`
 document.addEventListener("DOMContentLoaded", function() {
@@ -197,10 +203,10 @@ pi
 
 Pi doesn't ship with a free built-in model the way some tools do, so you'll need to connect one before your first prompt works. Follow this decision tree:
 
-1. **Already have ChatGPT Plus or Pro?** Run `/login` inside Pi and choose ChatGPT (Codex). This is officially sanctioned by OpenAI for third-party tools like Pi — safe to use.
-2. **No ChatGPT subscription?** Sign up for a free [OpenRouter](https://openrouter.ai) account, grab an API key, and use one of the models tagged `:free` (for example `google/gemma-4-31b-it:free`). Zero cost, no local compute required.
+1. **Already have ChatGPT Plus or Pro?** Run `/login` inside Pi, choose OpenAI, then **Sign in with ChatGPT**. This is OpenAI's official way to use your ChatGPT plan in third-party tools, and Pi was one of the open-source tools OpenAI listed at launch. Requests count against your plan's usage, and you can cap how much Pi uses in ChatGPT's settings. (You may also see an older "OpenAI Codex (legacy)" option. Use the new one.)
+2. **No ChatGPT subscription?** Create a free [OpenRouter](https://openrouter.ai) account, then run `/login`, choose OpenRouter, and **Sign in with OpenRouter**. Pi opens your browser and creates an API key for you. Then use `/model` to pick one of the models tagged `:free` (for example `google/gemma-4-31b-it:free`). Zero cost, no local compute required.
 
-**A note on other subscriptions.** Pi's `/login` also lists Claude Pro/Max and GitHub Copilot as options. We don't recommend either: Anthropic's own terms explicitly prohibit routing Claude subscription credentials through third-party tools, and GitHub's terms treat non-official Copilot clients as a violation too — both have real enforcement history (account bans/suspensions). Stick with ChatGPT Codex or an API key.
+**A note on other subscriptions.** Pi's `/login` also lists Claude Pro/Max and GitHub Copilot as options. We don't recommend either: Anthropic's own terms explicitly prohibit routing Claude subscription credentials through third-party tools, and GitHub's terms treat non-official Copilot clients as a violation too — both have real enforcement history (account bans/suspensions). Stick with Sign in with ChatGPT, OpenRouter, or an API key.
 
 ## Send a test prompt
 

@@ -15,13 +15,18 @@ agentInstructions: |
      project settings win on conflicts.
 
   3. Setting defaultProvider and defaultModel so the student doesn't have
-     to pick a model every session.
+     to pick a model every session. Picking a model with /model only
+     changes the current session; pressing Ctrl+S in the /model picker
+     saves it as the default, which writes these same settings.
 
-  4. Why theme is left unset: Pi detects the terminal's background color
-     once on first run and defaults to "dark" or "light" automatically.
-     There's no live "auto, follows system" mode — it's a one-time
-     detection, not a continuous sync. Explain this rather than have the
-     student configure a theme value.
+  4. Why theme is left unset: the default theme, "system", takes its
+     colors from the terminal's own palette and follows it live when the
+     terminal switches between light and dark. Explain this rather than
+     have the student configure a theme value. Also mention tuiMode: Pi
+     runs fullscreen by default (its own scrollable transcript, mouse
+     selection, Ctrl+Shift+F to search, or Ctrl+F on Windows), and
+     "tuiMode": "regular" switches back to the terminal's normal
+     scrollback. Don't set it unless the student asks.
 
   If ~/.pi/agent/settings.json already exists, read it first, back it up
   with a timestamped copy in the same directory, and tell the student
@@ -56,11 +61,17 @@ We're creating the global one in this lesson.
 }
 ```
 
-Swap in whatever provider and model you connected to in the Installation lesson. Once this is set, new sessions use it automatically — no need to pick a model every time.
+Swap in whatever provider and model you connected to in the Installation lesson (for Sign in with ChatGPT, the provider is `openai`). Once this is set, new sessions use it automatically, no need to pick a model every time.
+
+Picking a model with `/model` only changes the current session. Press `Ctrl+S` in the `/model` picker to save your choice as the default instead.
 
 ## A note on themes
 
-You might expect a `theme` setting here too, but we're leaving it unset on purpose. Pi checks your terminal's background color the first time it runs and picks `"dark"` or `"light"` for you automatically. There's no `"auto"` value that continuously follows your system's light/dark setting — it's a one-time detection at first run. If you want to override it later, set `"theme": "dark"` or `"theme": "light"` explicitly, or run `/settings` inside Pi to pick one interactively.
+You might expect a `theme` setting here too, but we're leaving it unset on purpose. The default theme, `"system"`, takes its colors from your terminal's own palette and follows it live, so if your terminal switches between light and dark, Pi switches with it. If you want something else, run `/settings` inside Pi to pick a theme interactively.
+
+## A note on fullscreen
+
+Pi runs fullscreen by default: it keeps its own scrollable transcript, with the editor pinned at the bottom. You can select text with the mouse and search the transcript with `Ctrl+Shift+F` (`Ctrl+F` on Windows). If you'd rather keep your terminal's normal scrollback, set `"tuiMode": "regular"`.
 
 ## Restart to apply changes
 
