@@ -54,15 +54,15 @@ agentInstructions: |
      its own OAuth session.
 
   7. Try it from the command line first to confirm the gateway works:
-     `pi --provider cloudflare-ai-gateway --model "claude-sonnet-4-5"`.
+     `pi --provider cloudflare-ai-gateway --model "claude-sonnet-5"`.
      Then try an OpenAI model through the same gateway:
-     `pi --provider cloudflare-ai-gateway --model "gpt-5.1"`.
+     `pi --provider cloudflare-ai-gateway --model "gpt-6-sol"`.
 
   8. Optionally, make one of these the default for future sessions by
      setting defaultProvider and defaultModel in
      ~/.pi/agent/settings.json (see the Configuration lesson), e.g.
      `{ "defaultProvider": "cloudflare-ai-gateway", "defaultModel":
-     "claude-sonnet-4-5" }`.
+     "claude-sonnet-5" }`.
 
   9. Test: after connecting, send a message with each of the two models,
      confirm a response comes back from each, then check the gateway's

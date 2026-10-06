@@ -43,6 +43,17 @@ agentInstructions: |
      the skill. Fire off multiple predictions concurrently when possible.
      Output URLs expire after 1 hour, so download files promptly.
 
+  5. Optional: if the student has signed in to OpenRouter (/login) and
+     has codemode enabled (see the Code mode lesson), show the
+     alternative of generating an image inside Pi itself with a codemode
+     script: find a model with models.getAvailableOfType("image",
+     "openrouter") (e.g. google/gemini-2.5-flash-image), call
+     models.generateImages(), and show it with image(). image() also
+     saves the file to a temp path named in the result, so it can be
+     copied next to the Replicate outputs. Mention that OpenRouter image
+     models are paid, not :free. Skip this step if they don't have
+     OpenRouter set up; it's not required.
+
   Verify completion by confirming the student has at least one generated
   image and one generated video saved locally.
 ---
@@ -84,3 +95,5 @@ Restart `pi` after adding the token so it picks up the new environment variable.
 **Generate video** — Take one of your generated images and bring it to life with Veo 3.1 Fast. Describe the motion or scene you want, and the model produces a short video clip.
 
 The Replicate skill gives Pi everything it needs to discover models, check their input schemas, create predictions, and retrieve results — all through the API. No CLI tools or SDKs needed.
+
+**Optional: generate an image without leaving Pi** — If you've signed in to OpenRouter and turned on codemode (see the [Code mode lesson](/lessons/code-mode)), Pi can also generate images itself with `models.generateImages()`, using OpenRouter image models like `google/gemini-2.5-flash-image`. Try the same prompt both ways and compare. OpenRouter's image models aren't free, so this uses a little of your OpenRouter credit.
