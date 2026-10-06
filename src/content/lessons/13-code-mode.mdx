@@ -1,0 +1,130 @@
+---
+title: "Code mode"
+slug: code-mode
+description: "Let Pi write small scripts that call tools in parallel."
+order: 13
+quiz: true
+agentInstructions: |
+  Cover these four topics:
+
+  1. What codemode is: a built-in tool that lets the model write a short
+     JavaScript script instead of making one tool call at a time. The
+     script calls Pi's other tools as tools.<name>(args), for example
+     tools.read({ path }) or tools.bash({ command }), and only the
+     script's output goes back to the model. Scripts run in a QuickJS
+     sandbox with no file system, network, or timers of their own: they
+     can only reach the outside world through tools. Tool calls made from
+     a script are real, so they show up in the transcript and extension
+     permission checks still apply.
+
+  2. Why it helps: one script can run many tool calls in parallel with
+     Promise.all, saving a model round trip for each, and it can filter or
+     summarize large results before the model sees them, which saves
+     context. It's also how MCP tools are reached by default: in the MCP
+     lesson, the weather lookup went through a codemode script that used
+     searchTools() to find the tool, then called it. describeTool() and
+     describeNamespace() show a tool's or server's details.
+
+  3. Turning it on: Pi enables codemode automatically when an MCP server
+     with codemode exposure connects. To keep it on in every session, add
+     "+codemode" to defaultTools in ~/.pi/agent/settings.json:
+     "defaultTools": ["+codemode"]. The + keeps read, bash, edit, and
+     write. For one run, list every tool: `pi --tools
+     read,bash,edit,write,codemode`. The codemode.mode setting can be "on"
+     (default, other tools stay available directly too) or "only" (the
+     model reaches every tool through scripts).
+
+  4. Beyond tool calls: store(key, value) and load(key) keep small values
+     between codemode calls in the same session (and survive resume). The
+     models global runs non-chat models with the session's credentials:
+     models.generateImages() generates images (for example with an
+     OpenRouter image model), and models.classify() answers typed
+     questions with classifier models. Mention these briefly; the student
+     doesn't need to try them.
+
+  If ~/.pi/agent/settings.json already exists, read it first, back it up
+  with a timestamped copy in the same directory, and tell the student
+  where the backup is before making any changes. Use the Edit tool to make
+  surgical additions, never Write to replace the whole file. If
+  defaultTools already exists, add "+codemode" only if it holds only
+  +/- entries; if it's a plain list of names, append "codemode" instead.
+  After any edit, re-read the file and confirm it's well-formed JSON.
+
+  After teaching and quizzing, have the student run /reload, then the
+  parallel-read prompt from the lesson body, and point out the single
+  codemode call in the transcript. Verify completion by reading
+  ~/.pi/agent/settings.json and confirming defaultTools includes codemode
+  (as "+codemode" or "codemode").
+---
+
+import AgentPrompt from '../../components/AgentPrompt.astro'
+
+Normally, a model uses tools one call at a time: call a tool, wait for the result, decide what to do next, call another. That's fine for a single lookup, but slow and wasteful when a task needs ten reads or a hundred API calls.
+
+**Codemode** is a different approach. Instead of calling tools one by one, the model writes a short JavaScript script that calls them, and only the script's output goes back to the model.
+
+<AgentPrompt title="Code mode" />
+
+## What a script looks like
+
+Here's the kind of script a model might write to read every lesson file at once and report which is longest:
+
+```js
+const ls = await tools.bash({ command: "ls src/content/lessons" });
+const files = ls.output.split("\n").filter(Boolean);
+const counts = await Promise.all(
+  files.map(async (f) => {
+    const text = await tools.read({ path: `src/content/lessons/${f}` });
+    return [f, text.split(/\s+/).length];
+  }),
+);
+return counts.sort((a, b) => b[1] - a[1]).slice(0, 3);
+```
+
+Every Pi tool is available as `tools.<name>()`. Scripts run in a sandbox with no file system or network access of their own, so they can only do what Pi's tools can do. The calls are real, though: they show up in the transcript like any other tool call.
+
+## Why it helps
+
+- **Fewer round trips.** Ten tool calls in one script is one step for the model, not ten.
+- **Parallel work.** `Promise.all` runs the calls at the same time.
+- **Less context.** A script can filter a huge result down to the few lines that matter before the model ever sees it.
+
+You've already used codemode. In the MCP lesson, the weather lookup went through a codemode script: it called `searchTools()` to find the right weather tool, then called it. That's the default way MCP tools reach the model.
+
+## Turn it on for every session
+
+Pi turns codemode on automatically when an MCP server needs it. To keep it on all the time, add it to `defaultTools` in `~/.pi/agent/settings.json`:
+
+```json
+{
+  "defaultTools": ["+codemode"]
+}
+```
+
+The `+` adds `codemode` and keeps `read`, `bash`, `edit`, and `write`. Run `/reload` to pick it up.
+
+For a single run, `--tools` replaces the whole selection, so list every tool:
+
+```bash
+pi --tools read,bash,edit,write,codemode
+```
+
+<AgentPrompt title="Code mode" prompt={`Add codemode to my default tools, then help me verify the Code mode lesson is complete.`} />
+
+## Try it
+
+After `/reload`, start Pi in any folder with a handful of files and ask:
+
+> Use one codemode script to read every file in this folder in parallel and tell me which one is longest.
+
+Look for a single `codemode` call in the transcript, with the individual reads nested inside it.
+
+## More than tool calls
+
+Scripts have a few extras worth knowing about:
+
+- **`store(key, value)` and `load(key)`** keep small values, like IDs or a cursor, between codemode calls in the same session.
+- **`models.generateImages()`** generates images with an image model your providers give you access to, such as one on OpenRouter.
+- **`models.classify()`** answers typed questions (pick a label, give a score, yes or no) with fast classifier models.
+
+For the full script API and limits, see Pi's [codemode documentation](https://pi.dev/docs/latest/codemode).

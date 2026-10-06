@@ -2,7 +2,7 @@
 title: "Extensions"
 slug: extensions
 description: "Extend Pi's own behavior with TypeScript extensions."
-order: 12
+order: 14
 quiz: true
 agentInstructions: |
   Cover these four topics:
@@ -10,9 +10,9 @@ agentInstructions: |
   1. What extensions are: TypeScript modules Pi loads at startup that can
      hook into events, register custom tools and commands, and change how
      Pi itself behaves — not just what external tools it has access to.
-     Reference the Tools lesson (MCP/pi-mcp-adapter) so the student sees
-     the progression: MCP exposes external tools, extensions can modify
-     Pi's own behavior.
+     Reference the MCP lesson so the student sees the progression: MCP
+     servers add external tools, extensions can modify Pi's own behavior.
+     (Pi's MCP and codemode support are themselves built-in extensions.)
 
   2. Where extensions live: ~/.pi/agent/extensions/ (global, *.ts files
      or */index.ts subdirectories) and .pi/extensions/ (project, only
@@ -46,7 +46,7 @@ agentInstructions: |
 
 import AgentPrompt from '../../components/AgentPrompt.astro'
 
-In the Tools lesson, you connected an MCP server to give Pi access to an external tool. That's one way to extend Pi — but it only adds tools. What if you want to hook into Pi's own lifecycle, add a custom slash command, or change how Pi behaves rather than just what it can reach?
+In the MCP lesson, you connected an MCP server to give Pi access to an external tool. That's one way to extend Pi — but it only adds tools. What if you want to hook into Pi's own lifecycle, add a custom slash command, or change how Pi behaves rather than just what it can reach?
 
 That's what extensions are for. An extension is a TypeScript module Pi loads at startup. It can subscribe to events, register custom tools and commands, and even build its own terminal UI — this is Pi's flagship way of customizing itself.
 
