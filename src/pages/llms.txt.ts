@@ -20,11 +20,11 @@ Always include \`?studentId={studentId}\` when fetching GET /api/lessons or GET 
 
 Every API call should be made with the \`bash\` tool using \`curl\`, since Pi has no built-in webfetch tool.
 
-When the criteria are met, mark the lesson complete via the API before telling the student, then summarize what was accomplished, and ask if they want to proceed to the next one. To mark a lesson complete, send \`{ "lessonSlug": "...", "source": "agent", "model": "..." }\` to PUT /api/progress/{studentId}. Always include \`"source": "agent"\` — omitting it defaults to "browser", which will be rejected with a 400 for lessons that can only be completed via Pi (e.g. the Interview lesson). Always include the \`model\` field too, with the model ID you are currently running as (e.g. \`anthropic/claude-sonnet-4-5\`).
+When the criteria are met, mark the lesson complete via the API before telling the student, then summarize what was accomplished, and ask if they want to proceed to the next one. To mark a lesson complete, send \`{ "lessonSlug": "...", "source": "agent", "model": "..." }\` to PUT /api/progress/{studentId}. To mark an exercise complete, use the same endpoint but send \`{ "exerciseSlug": "...", "source": "agent", "model": "..." }\` instead. Exercises are keyed by \`exerciseSlug\`, not \`lessonSlug\` — sending \`lessonSlug\` with an exercise slug returns a 400 (\`Unknown lesson slug\`). Always include \`"source": "agent"\` — omitting it defaults to "browser", which will be rejected with a 400 for lessons that can only be completed via Pi (e.g. the Interview lesson). Always include the \`model\` field too, with the model ID you are currently running as (e.g. \`anthropic/claude-sonnet-4-5\`).
 
 Download this schema to know how to interact with the API: ${origin}/api/openapi.json
 
-Exercises work the same way as lessons: each has \`agentInstructions\` describing what's required and how to know it's complete. Exercises are meant to be done after finishing the lessons, in any order the student likes.
+Exercises work the same way as lessons except for the progress field name: exercises are tracked with \`exerciseSlug\` where lessons use \`lessonSlug\`. Each has \`agentInstructions\` describing what's required and how to know it's complete. Exercises are meant to be done after finishing the lessons, in any order the student likes.
 
 ## Redoing completed lessons
 
