@@ -29,7 +29,9 @@ agentInstructions: |
   4. Installing a real extension: pi-web-access, which fills a real gap
      since Pi has no built-in web search or URL fetching. Install with
      `pi install npm:pi-web-access`, run /reload, then try a web search
-     or fetch a URL.
+     or fetch a URL. If web tools remain unavailable after /reload, provide
+     a continuation prompt with the student’s ID and progress, then have
+     them run /new.
 
   After teaching and quizzing, verify completion by confirming
   pi-web-access is installed (check ~/.pi/agent/settings.json or
@@ -99,11 +101,15 @@ Install it:
 pi install npm:pi-web-access
 ```
 
-It works immediately with no API keys required. Run `/reload` to pick it up, then try it:
+It works with no API keys required. Run `/reload` to pick it up, then try it:
 
 > Search the web for what's new in TypeScript 5.9
 
-<AgentPrompt title="Extensions" prompt={`I've installed pi-web-access and run /reload. Let's verify the Extensions lesson is complete.`} />
+- If web tools are still unavailable, the existing session may be preserving its old tool selection.
+- Ask for the continuation prompt before running `/new` so that you can continue from the same point in the new session.
+- `pi -c` resumes the same session, so it won't fix that case.
+
+<AgentPrompt title="Extensions" prompt={`I've installed pi-web-access and run /reload. Let's verify the extension works; if the tools are still unavailable after /reload, help me continue in a new session and verify the lesson is complete.`} />
 
 ## A note on modes
 
